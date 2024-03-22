@@ -32,12 +32,12 @@ class LocalWebCache extends WebCache {
     async persist(indexHtml) {
         // extract version from index (e.g. manifest-2.2206.9.json -> 2.2206.9)
 		let version = null;
-		const matches = await indexHtml.match(/"client_revision"\s*:\s*(\d+)/) || [];
+		const matches = indexHtml.match(/"client_revision"\s*:\s*(\d+)/) || [];
 		if (matches[1]) {
 			version = `2.3000.${matches[1]}`;
 			console.log(version);
 		}else{
-			version = await indexHtml.match(/manifest-([\d\\.]+)\.json/)[1];
+			version = indexHtml.match(/manifest-([\d\\.]+)\.json/)[1];
 			console.log(version);
 		}
 		
