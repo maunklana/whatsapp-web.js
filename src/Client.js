@@ -1,7 +1,6 @@
 'use strict';
 
 const EventEmitter = require('events');
-const puppeteer = require('puppeteer');
 const moduleRaid = require('@pedroslopez/moduleraid/moduleraid');
 
 const Util = require('./util/Util');
@@ -71,6 +70,8 @@ class Client extends EventEmitter {
         } else {
             this.authStrategy = this.options.authStrategy;
         }
+
+        this.puppeteer = options.puppeteer || require('puppeteer');
 
         this.authStrategy.setup(this);
 
@@ -279,7 +280,7 @@ class Client extends EventEmitter {
 
         const puppeteerOpts = this.options.puppeteer;
         if (puppeteerOpts && puppeteerOpts.browserWSEndpoint) {
-            browser = await puppeteer.connect(puppeteerOpts);
+            browser = await this.puppeteer.connect(puppeteerOpts);
             page = await browser.newPage();
         } else {
             const browserArgs = [...(puppeteerOpts.args || [])];
@@ -289,7 +290,7 @@ class Client extends EventEmitter {
             // navigator.webdriver fix
             browserArgs.push('--disable-blink-features=AutomationControlled');
 
-            browser = await puppeteer.launch({...puppeteerOpts, args: browserArgs});
+            browser = await this.puppeteer.launch({...puppeteerOpts, args: browserArgs});
             page = (await browser.pages())[0];
         }
 
