@@ -71,7 +71,7 @@ class Client extends EventEmitter {
             this.authStrategy = this.options.authStrategy;
         }
 
-        this.puppeteer = options.puppeteer || require('puppeteer');
+        this.puppeteer = options.puppeteer?.puppeteer || require('puppeteer');
 
         this.authStrategy.setup(this);
 
